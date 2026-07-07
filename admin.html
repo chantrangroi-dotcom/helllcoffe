@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Coffee Booking Admin</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+    <!-- Animate CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/admin.css">
+</head>
+
+<body class="bg-light d-flex flex-column min-vh-100">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm sticky-top">
+        <div class="container py-2">
+            <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="index.html">
+                <span>☕</span> Coffee Booking Admin
+            </a>
+            <div class="d-flex align-items-center gap-2">
+                <a href="../index.html" class="btn btn-warning btn-sm rounded-pill px-3 fw-semibold">
+                    <i class="bi bi-house-door me-1"></i> Trang khách
+                </a>
+                <button class="btn btn-outline-light btn-sm rounded-pill px-3 d-inline-flex align-items-center gap-1" onclick="loadDashboard()">
+                    <i class="bi bi-arrow-clockwise"></i> Làm mới
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content -->
+    <div class="container py-5 my-auto">
+        
+        <!-- Tiêu đề trang -->
+        <div class="text-center mb-5">
+            <span class="badge bg-success-subtle text-success border border-success-subtle mb-2 px-3 py-1 rounded-pill">Hệ thống điều khiển</span>
+            <h2 class="fw-bold text-dark mb-1">
+                📊 Bảng điều khiển quản trị
+            </h2>
+            <p class="text-muted small">Tổng quan số liệu và truy cập nhanh các chức năng hệ thống.</p>
+        </div>
+
+        <!-- Thống kê (Cards) -->
+        <div class="row g-4 mb-5">
+            <div class="col-lg-3 col-md-6">
+                <div class="card border-0 shadow-sm rounded-4 bg-primary text-white h-100 overflow-hidden position-relative">
+                    <div class="card-body p-4 text-center">
+                        <div class="mb-2 opacity-75"><i class="bi bi-cup-hot-fill display-5"></i></div>
+                        <h6 class="fw-semibold mb-2">Tổng đồ uống</h6>
+                        <h1 id="totalDrinks" class="fw-bold mb-0">0</h1>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <div class="card border-0 shadow-sm rounded-4 bg-success text-white h-100 overflow-hidden position-relative">
+                    <div class="card-body p-4 text-center">
+                        <div class="mb-2 opacity-75"><i class="bi bi-grid-fill display-5"></i></div>
+                        <h6 class="fw-semibold mb-2">Danh mục</h6>
+                        <h1 id="totalCategories" class="fw-bold mb-0">0</h1>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <div class="card border-0 shadow-sm rounded-4 bg-warning text-dark h-100 overflow-hidden position-relative">
+                    <div class="card-body p-4 text-center">
+                        <div class="mb-2 opacity-75"><i class="bi bi-table display-5"></i></div>
+                        <h6 class="fw-semibold mb-2">Bàn</h6>
+                        <h1 id="totalTables" class="fw-bold mb-0">0</h1>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <div class="card border-0 shadow-sm rounded-4 bg-danger text-white h-100 overflow-hidden position-relative">
+                    <div class="card-body p-4 text-center">
+                        <div class="mb-2 opacity-75"><i class="bi bi-calendar-check-fill display-5"></i></div>
+                        <h6 class="fw-semibold mb-2">Đơn đặt bàn</h6>
+                        <h1 id="totalReservations" class="fw-bold mb-0">0</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chức năng (Navigation Cards) -->
+        <div class="row g-4">
+            <div class="col-lg-3 col-md-6">
+                <div class="card border-0 shadow-sm rounded-4 h-100 text-center hover-card transition-all">
+                    <div class="card-body p-4 d-flex flex-column justify-content-between">
+                        <div>
+                            <div class="text-warning mb-3"><i class="bi bi-cup-hot-fill display-4"></i></div>
+                            <h4 class="fw-bold text-dark fs-5">Quản lý Menu</h4>
+                            <p class="text-muted small mb-4">Thêm, sửa, xóa đồ uống.</p>
+                        </div>
+                        <a href="./drinks.html" class="btn btn-outline-warning rounded-pill fw-semibold w-100">
+                            Truy cập <i class="bi bi-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <div class="card border-0 shadow-sm rounded-4 h-100 text-center hover-card transition-all">
+                    <div class="card-body p-4 d-flex flex-column justify-content-between">
+                        <div>
+                            <div class="text-danger mb-3"><i class="bi bi-grid-fill display-4"></i></div>
+                            <h4 class="fw-bold text-dark fs-5">Danh mục</h4>
+                            <p class="text-muted small mb-4">Quản lý danh mục đồ uống.</p>
+                        </div>
+                        <a href="./categories.html" class="btn btn-outline-danger rounded-pill fw-semibold w-100">
+                            Truy cập <i class="bi bi-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <div class="card border-0 shadow-sm rounded-4 h-100 text-center hover-card transition-all">
+                    <div class="card-body p-4 d-flex flex-column justify-content-between">
+                        <div>
+                            <div class="text-primary mb-3"><i class="bi bi-table display-4"></i></div>
+                            <h4 class="fw-bold text-dark fs-5">Quản lý Bàn</h4>
+                            <p class="text-muted small mb-4">Quản lý trạng thái các bàn.</p>
+                        </div>
+                        <a href="./tables.html" class="btn btn-outline-primary rounded-pill fw-semibold w-100">
+                            Truy cập <i class="bi bi-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <div class="card border-0 shadow-sm rounded-4 h-100 text-center hover-card transition-all">
+                    <div class="card-body p-4 d-flex flex-column justify-content-between">
+                        <div>
+                            <div class="text-success mb-3"><i class="bi bi-calendar-check-fill display-4"></i></div>
+                            <h4 class="fw-bold text-dark fs-5">Đặt bàn</h4>
+                            <p class="text-muted small mb-4">Quản lý đơn đặt bàn.</p>
+                        </div>
+                        <a href="./reservations.html" class="btn btn-outline-success rounded-pill fw-semibold w-100">
+                            Truy cập <i class="bi bi-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white mt-auto py-3 text-center small">
+        <p class="mb-0 text-light opacity-75">© 2026 Coffee Booking Admin. All Rights Reserved.</p>
+    </footer>
+
+    <!-- Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- API -->
+    <script src="../js/api.js"></script>
+    <!-- Dashboard -->
+    <script src="../js/admin.js"></script>
+
+</body>
+
+</html>

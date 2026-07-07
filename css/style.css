@@ -1,0 +1,117 @@
+/* =====================================
+   COFFEE BOOKING - PROFESSIONAL STYLES
+   ===================================== */
+
+:root {
+    --primary-color: #c69258; /* Màu cà phê sữa ấm */
+    --primary-dark: #2c221e;  /* Đen nâu sang trọng */
+    --accent-red: #d9534f;
+    --transition-speed: 0.3s;
+}
+
+body {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: #fcfbfa;
+    color: #333333;
+    overflow-x: hidden;
+}
+
+/* Navbar mượt mà */
+.navbar {
+    background-color: var(--primary-dark) !important;
+    border-bottom: 2px solid rgba(198, 146, 88, 0.2);
+}
+.navbar-brand {
+    letter-spacing: 0.5px;
+}
+
+/* Banner / Hero Section */
+.hero-banner {
+    background: linear-gradient(rgba(28, 22, 19, 0.75), rgba(28, 22, 19, 0.75)), 
+                url('https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=1600') center/cover;
+    height: 85vh;
+    display: flex;
+    align-items: center;
+}
+
+/* Card Đồ uống chuyên nghiệp */
+.card {
+    border: none;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #ffffff;
+    transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+}
+
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12) !important;
+}
+
+.card-img-top {
+    transition: transform 0.5s ease;
+}
+
+.card:hover .card-img-top {
+    transform: scale(1.04);
+}
+
+/* Buttons tùy biến */
+.btn-warning {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: #fff;
+    font-weight: 500;
+    transition: all var(--transition-speed);
+}
+
+.btn-warning:hover {
+    background-color: #b07e46;
+    border-color: #b07e46;
+    color: #fff;
+}
+
+/* Danh mục Active state */
+.category-btn {
+    border-radius: 50rem;
+    padding: 0.5rem 1.25rem;
+    font-weight: 500;
+    transition: all var(--transition-speed);
+}
+
+.category-btn.active, .category-btn:hover {
+    background-color: var(--primary-dark) !important;
+    color: #fff !important;
+    border-color: var(--primary-dark) !important;
+}
+
+/* Input Search sang trọng */
+.input-group-lg .form-control {
+    border-radius: 50rem 0 0 50rem;
+    padding-left: 1.5rem;
+    border-color: #e0d8ce;
+}
+.input-group-lg .input-group-text {
+    border-radius: 0 50rem 50rem 0;
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color);
+    color: #fff;
+    padding-right: 1.5rem;
+}
+
+/* Modal cải tiến */
+.modal-content {
+    border-radius: 16px;
+    border: none;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+/* Footer tinh tế */
+footer {
+    background-color: var(--primary-dark) !important;
+    font-size: 0.95rem;
+}
+
+footer hr {
+    border-color: rgba(255, 255, 255, 0.1);
+}

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đặt bàn - Coffee Booking</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+    <!-- CSS tùy chỉnh (Đồng bộ giao diện) -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="bg-light d-flex flex-column min-vh-100">
+
+    <!-- Navbar phụ đơn giản để quay về trang chủ -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">
+                ☕ Coffee Booking
+            </a>
+            <a href="index.html" class="btn btn-outline-light btn-sm rounded-pill px-3">
+                <i class="bi bi-house-door-fill"></i> Về trang chủ
+            </a>
+        </div>
+    </nav>
+
+    <!-- Form Đặt bàn -->
+    <div class="container my-auto py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8">
+                <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+                    <div class="card-header bg-dark text-white text-center py-4 border-bottom border-warning border-3">
+                        <span class="badge bg-warning text-dark mb-2 px-3 py-1 rounded-pill">Trực tuyến</span>
+                        <h2 class="mb-0 fw-bold">
+                            ☕ Đặt bàn Coffee Booking
+                        </h2>
+                        <p class="text-light small mb-0 mt-1 opacity-75">Giữ chỗ ngay để tận hưởng không gian trọn vẹn</p>
+                    </div>
+
+                    <div class="card-body p-4 p-md-5 bg-white">
+                        <form id="bookingForm">
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Họ và tên</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light"><i class="bi bi-person-fill text-muted"></i></span>
+                                    <input type="text" id="customerName" class="form-control" placeholder="Nhập họ tên của bạn" required>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Số điện thoại</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light"><i class="bi bi-telephone-fill text-muted"></i></span>
+                                    <input type="text" id="phone" class="form-control" placeholder="09xxxxxxxx" required>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Chọn bàn</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light"><i class="bi bi-grid-3x3-gap-fill text-muted"></i></span>
+                                    <select id="table" class="form-select">
+                                        <!-- Render dynamically by booking.js -->
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-semibold">Ngày đặt</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light"><i class="bi bi-calendar-event text-muted"></i></span>
+                                        <input type="date" id="date" class="form-control" required>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-semibold">Giờ đặt</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light"><i class="bi bi-clock-fill text-muted"></i></span>
+                                        <input type="time" id="time" class="form-control" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-warning w-100 mt-4 py-3 fw-bold rounded-pill shadow-sm">
+                                <i class="bi bi-calendar-check me-2"></i> Xác nhận đặt bàn
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Thành công -->
+    <div class="modal fade" id="successModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 rounded-4 shadow-lg">
+                <div class="modal-header bg-success text-white border-0 py-3">
+                    <h5 class="modal-title fw-bold">
+                        <i class="bi bi-patch-check-fill me-2"></i> Đặt bàn thành công
+                    </h5>
+                    <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center p-4">
+                    <div class="mb-3">
+                        <i class="bi bi-check-circle-fill text-success display-1"></i>
+                    </div>
+                    <h3 class="fw-bold mb-2">Cảm ơn bạn!</h3>
+                    <p class="text-muted mb-4">Thông tin giữ bàn của bạn đã được ghi nhận.</p>
+                    
+                    <div class="bg-light p-3 rounded-3 text-start small mb-3 border">
+                        <p class="mb-2"><strong>Khách hàng:</strong> <span id="successName" class="text-dark"></span></p>
+                        <p class="mb-2"><strong>Bàn:</strong> <span id="successTable" class="text-dark"></span></p>
+                        <p class="mb-2"><strong>Ngày:</strong> <span id="successDate" class="text-dark"></span></p>
+                        <p class="mb-0"><strong>Giờ:</strong> <span id="successTime" class="text-dark"></span></p>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 justify-content-center pb-4">
+                    <button class="btn btn-success rounded-pill px-5 fw-semibold" data-bs-dismiss="modal">
+                        Đóng
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white mt-auto py-3 text-center small">
+        <p class="mb-0 text-light opacity-75">© 2026 Coffee Booking. All Rights Reserved.</p>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- API -->
+    <script src="js/api.js"></script>
+    <!-- Booking JS -->
+    <script src="js/booking.js"></script>
+
+</body>
+
+</html>

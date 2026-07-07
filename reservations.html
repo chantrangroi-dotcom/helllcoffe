@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Đặt bàn - Coffee Booking Admin</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="../css/admin.css">
+</head>
+
+<body class="bg-light d-flex flex-column min-vh-100">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm sticky-top">
+        <div class="container py-2">
+            <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="index.html">
+                <span>☕</span> Coffee Booking Admin
+            </a>
+            <div class="d-flex align-items-center gap-2">
+                <a href="index.html" class="btn btn-outline-light btn-sm rounded-pill px-3">
+                    <i class="bi bi-speedometer2 me-1"></i> Dashboard
+                </a>
+                <a href="../index.html" class="btn btn-warning btn-sm rounded-pill px-3 fw-semibold">
+                    <i class="bi bi-house-door me-1"></i> Trang khách
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content -->
+    <div class="container py-5 my-auto">
+        <!-- Tiêu đề & Nút thêm -->
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+            <div>
+                <span class="badge bg-success-subtle text-success border border-success-subtle mb-1 px-3 py-1 rounded-pill">Quản trị lịch hẹn</span>
+                <h2 class="fw-bold mb-0 text-dark">
+                    📅 Quản lý Đặt bàn
+                </h2>
+                <p class="text-muted small mb-0 mt-1">
+                    Theo dõi, cập nhật trạng thái và quản lý danh sách đặt bàn của khách.
+                </p>
+            </div>
+            <button class="btn btn-success btn-lg rounded-pill px-4 shadow-sm fw-bold d-inline-flex align-items-center justify-content-center gap-2"
+                data-bs-toggle="modal"
+                data-bs-target="#reservationModal">
+                <i class="bi bi-plus-circle-fill"></i> Thêm đặt bàn
+            </button>
+        </div>
+
+        <!-- Tìm kiếm & Bộ lọc -->
+        <div class="row g-3 mb-4">
+            <div class="col-md-7">
+                <div class="input-group input-group-lg shadow-sm rounded-pill overflow-hidden border bg-white">
+                    <span class="input-group-text bg-white border-0 ps-4 text-muted">
+                        <i class="bi bi-search"></i>
+                    </span>
+                    <input id="searchReservation" class="form-control border-0 shadow-none ps-2" placeholder="Tìm theo tên hoặc SĐT khách hàng...">
+                </div>
+            </div>
+            <div class="col-md-5">
+                <select id="filterStatus" class="form-select form-select-lg shadow-sm rounded-pill border ps-4">
+                    <option value="">Tất cả trạng thái</option>
+                    <option value="Chờ xác nhận">Chờ xác nhận</option>
+                    <option value="Đã xác nhận">Đã xác nhận</option>
+                    <option value="Hoàn thành">Hoàn thành</option>
+                    <option value="Đã hủy">Đã hủy</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Bảng danh sách -->
+        <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+            <div class="table-responsive mb-0">
+                <table class="table table-hover align-middle bg-white mb-0">
+                    <thead class="table-dark text-center text-uppercase fs-7">
+                        <tr>
+                            <th width="70" class="py-3">ID</th>
+                            <th class="text-start py-3 ps-3">Khách hàng</th>
+                            <th class="py-3">SĐT</th>
+                            <th class="py-3">Bàn</th>
+                            <th width="80" class="py-3">Người</th>
+                            <th class="py-3">Ngày</th>
+                            <th class="py-3">Giờ</th>
+                            <th class="py-3">Trạng thái</th>
+                            <th width="180" class="py-3">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableReservation">
+                        <!-- Render dynamically by reservations.js -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Thông tin Đặt bàn -->
+    <div class="modal fade" id="reservationModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 rounded-4 shadow-lg overflow-hidden">
+                <div class="modal-header bg-dark text-white border-0 py-3">
+                    <h5 class="modal-title fw-bold d-flex align-items-center gap-2">
+                        <i class="bi bi-calendar2-week-fill text-warning"></i> Thông tin Đặt bàn
+                    </h5>
+                    <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4 bg-white">
+                    <input type="hidden" id="reservationId">
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-secondary">Tên khách hàng</label>
+                            <input id="customerName" class="form-control bg-light shadow-none" placeholder="Nhập tên khách hàng">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-secondary">Số điện thoại</label>
+                            <input id="phone" class="form-control bg-light shadow-none" placeholder="Nhập số điện thoại">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label fw-semibold text-secondary">Bàn</label>
+                            <input id="tableName" class="form-control bg-light shadow-none" placeholder="Ví dụ: Bàn 1">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label fw-semibold text-secondary">Số người</label>
+                            <input type="number" id="people" class="form-control bg-light shadow-none" placeholder="Số lượng">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label fw-semibold text-secondary">Trạng thái</label>
+                            <select id="status" class="form-select bg-light shadow-none">
+                                <option value="Chờ xác nhận">Chờ xác nhận</option>
+                                <option value="Đã xác nhận">Đã xác nhận</option>
+                                <option value="Hoàn thành">Hoàn thành</option>
+                                <option value="Đã hủy">Đã hủy</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-secondary">Ngày</label>
+                            <input type="date" id="date" class="form-control bg-light shadow-none">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-secondary">Giờ</label>
+                            <input type="time" id="time" class="form-control bg-light shadow-none">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 bg-light px-4 pb-3">
+                    <button class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">
+                        Đóng
+                    </button>
+                    <button class="btn btn-success rounded-pill px-4 fw-bold shadow-sm" onclick="saveReservation()">
+                        <i class="bi bi-floppy-fill me-1"></i> Lưu lại
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white mt-auto py-3 text-center small">
+        <p class="mb-0 text-light opacity-75">© 2026 Coffee Booking Admin. All Rights Reserved.</p>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+    <!-- API -->
+    <script src="../js/api.js"></script>
+    <!-- JS -->
+    <script src="../js/reservations.js"></script>
+
+</body>
+
+</html>
