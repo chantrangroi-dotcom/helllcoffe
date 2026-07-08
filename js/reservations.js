@@ -91,6 +91,11 @@ function confirmDelete(callback) {
 // =========================
 
 function loadReservations() {
+    if (typeof API_RESERVATIONS === 'undefined') {
+        console.error("Chưa cấu hình biến API_RESERVATIONS ở api.js!");
+        return;
+    }
+
     fetch(API_RESERVATIONS)
         .then(res => res.json())
         .then(data => {
@@ -108,6 +113,7 @@ function loadReservations() {
 
 function renderTable(list) {
     const tbody = document.getElementById("tableReservation");
+    if (!tbody) return;
     
     if (!list || list.length === 0) {
         tbody.innerHTML = `
@@ -122,44 +128,54 @@ function renderTable(list) {
 
     let html = "";
 
-    list.forEach(item => {
+    list.forEach((item, index) => {
+        // Dự phòng lấy đúng ID dù dữ liệu trả về có khác tên trường đi nữa
+        const itemId = item.id || item._id || item.reservationId || (index + 1);
+        const customerName = item.customerName || item.name || "Chưa có tên";
+        const phone = item.phone || item.phoneNumber || "";
+        const tableName = item.tableName || item.table || "Chưa chọn";
+        const people = item.people || item.guests || 1;
+        const date = item.date || "";
+        const time = item.time || "";
+        const status = item.status || "Chờ xác nhận";
+
         let badgeClass = "bg-secondary-subtle text-secondary border border-secondary-subtle";
         let dotColor = "bg-secondary";
 
-        if (item.status === "Chờ xác nhận") {
+        if (status === "Chờ xác nhận") {
             badgeClass = "bg-warning-subtle text-warning border border-warning-subtle";
             dotColor = "bg-warning";
-        } else if (item.status === "Đã xác nhận") {
+        } else if (status === "Đã xác nhận") {
             badgeClass = "bg-success-subtle text-success border border-success-subtle";
             dotColor = "bg-success";
-        } else if (item.status === "Hoàn thành") {
+        } else if (status === "Hoàn thành") {
             badgeClass = "bg-primary-subtle text-primary border border-primary-subtle";
             dotColor = "bg-primary";
-        } else if (item.status === "Đã hủy") {
+        } else if (status === "Đã hủy") {
             badgeClass = "bg-danger-subtle text-danger border border-danger-subtle";
             dotColor = "bg-danger";
         }
 
         html += `
             <tr class="animate__animated animate__fadeIn">
-                <td class="text-center fw-semibold text-secondary">#${item.id}</td>
-                <td class="fw-bold text-dark">${item.customerName}</td>
-                <td><a href="tel:${item.phone}" class="text-decoration-none text-dark">${item.phone}</a></td>
-                <td class="fw-semibold text-primary">${item.tableName}</td>
-                <td class="text-center">${item.people} khách</td>
-                <td class="text-center">${item.date}</td>
-                <td class="text-center font-monospace">${item.time}</td>
+                <td class="text-center fw-semibold text-secondary">#${itemId}</td>
+                <td class="fw-bold text-dark">${customerName}</td>
+                <td><a href="tel:${phone}" class="text-decoration-none text-dark">${phone}</a></td>
+                <td class="fw-semibold text-primary">${tableName}</td>
+                <td class="text-center">${people} khách</td>
+                <td class="text-center">${date}</td>
+                <td class="text-center font-monospace">${time}</td>
                 <td class="text-center">
                     <span class="badge ${badgeClass} px-3 py-2 rounded-pill d-inline-flex align-items-center gap-1 justify-content-center">
                         <span class="rounded-circle ${dotColor}" style="width: 6px; height: 6px;"></span>
-                        ${item.status}
+                        ${status}
                     </span>
                 </td>
                 <td class="text-center">
-                    <button class="btn btn-outline-warning btn-sm rounded-pill px-3 me-1" onclick="editReservation('${item.id}')">
+                    <button class="btn btn-outline-warning btn-sm rounded-pill px-3 me-1" onclick="editReservation('${itemId}')">
                         <i class="bi bi-pencil me-1"></i> Sửa
                     </button>
-                    <button class="btn btn-outline-danger btn-sm rounded-pill px-3" onclick="deleteReservation('${item.id}')">
+                    <button class="btn btn-outline-danger btn-sm rounded-pill px-3" onclick="deleteReservation('${itemId}')">
                         <i class="bi bi-trash me-1"></i> Xóa
                     </button>
                 </td>
@@ -229,23 +245,26 @@ function saveReservation() {
 // =========================
 
 function editReservation(id) {
-    const reservation = reservations.find(item => item.id == id);
+    const reservation = reservations.find(item => (item.id || item._id || item.reservationId) == id);
 
     if (!reservation) {
         errorAlert("Không tìm thấy đơn đặt bàn.");
         return;
     }
 
-    document.getElementById("reservationId").value = reservation.id;
-    document.getElementById("customerName").value = reservation.customerName;
-    document.getElementById("phone").value = reservation.phone;
-    document.getElementById("tableName").value = reservation.tableName;
-    document.getElementById("people").value = reservation.people;
-    document.getElementById("date").value = reservation.date;
-    document.getElementById("time").value = reservation.time;
-    document.getElementById("status").value = reservation.status;
+    document.getElementById("reservationId").value = reservation.id || reservation._id || reservation.reservationId || id;
+    document.getElementById("customerName").value = reservation.customerName || reservation.name || "";
+    document.getElementById("phone").value = reservation.phone || reservation.phoneNumber || "";
+    document.getElementById("tableName").value = reservation.tableName || reservation.table || "";
+    document.getElementById("people").value = reservation.people || reservation.guests || "";
+    document.getElementById("date").value = reservation.date || "";
+    document.getElementById("time").value = reservation.time || "";
+    document.getElementById("status").value = reservation.status || "Chờ xác nhận";
 
-    new bootstrap.Modal(document.getElementById("reservationModal")).show();
+    const modalEl = document.getElementById("reservationModal");
+    if (modalEl) {
+        bootstrap.Modal.getOrCreateInstance(modalEl).show();
+    }
 }
 
 // =========================
@@ -325,9 +344,9 @@ function applyFilters(keyword, statusValue) {
 
     if (keyword) {
         result = result.filter(item =>
-            item.customerName.toLowerCase().includes(keyword) ||
-            item.phone.toLowerCase().includes(keyword) ||
-            item.tableName.toLowerCase().includes(keyword)
+            (item.customerName || item.name || "").toLowerCase().includes(keyword) ||
+            (item.phone || item.phoneNumber || "").toLowerCase().includes(keyword) ||
+            (item.tableName || item.table || "").toLowerCase().includes(keyword)
         );
     }
 
